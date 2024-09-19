@@ -27,4 +27,5 @@ RUN python manage.py collectstatic --noinput
 RUN python manage.py migrate
 
 # 启动命令，使用 Gunicorn 作为应用服务器
-CMD ["gunicorn", "gamescoretracker.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "gamescoretracker.wsgi:application", "--bind", "0.0.0.0:8000", "--timeout", "120", "--log-level", "debug"]
+
