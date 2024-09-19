@@ -24,6 +24,7 @@ ENV PYTHONUNBUFFERED=1
 
 # 运行数据库迁移和收集静态文件的命令
 RUN python manage.py collectstatic --noinput
+RUN python manage.py makemigrations
 RUN python manage.py migrate
 
 # 启动命令，使用 Gunicorn 作为应用服务器
