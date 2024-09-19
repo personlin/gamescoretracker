@@ -34,7 +34,7 @@ DEBUG = bool(os.environ.get('DJANGO_DEBUG', False))
 # DEBUG = False
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'scoreboard.personlin.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'scoreboard.personlin.com']
 
 
 # Application definition
