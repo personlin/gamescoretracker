@@ -172,3 +172,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 开发环境下使用控制台邮件后端
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
