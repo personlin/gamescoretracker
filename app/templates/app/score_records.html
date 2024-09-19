@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ game.name }} 分數記錄{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{{ game.name }} 分數記錄</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>玩家</th>
+                <th>分數變化</th>
+                <th>原因</th>
+                <th>時間</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.game_score.player.name }}</td>
+                <td>{{ record.score_change }}</td>
+                <td>{{ record.reason|default:"" }}</td>
+                <td>{{ record.timestamp|date:"Y-m-d H:i:s" }}</td>
+                <td>
+                    <a href="{% url 'edit_score_record' record.id %}" class="btn btn-primary btn-sm">編輯</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">暫無記錄</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'game_detail' game.id %}" class="btn btn-secondary">返回遊戲詳情</a>
+</div>
+{% endblock %}

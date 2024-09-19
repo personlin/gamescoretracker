@@ -14,4 +14,6 @@ urlpatterns = [
     path('games/<int:game_id>/edit/', views.edit_game, name='edit_game'),
     path('games/<int:game_id>/export/', views.export_to_sheets, name='export_to_sheets'),
     path('games/<int:game_id>/update_score/<int:player_id>/<str:action>/', views.update_score, name='update_score'),
+    path('games/<int:game_id>/score_records/', views.score_records, name='score_records'),
+    path('score_records/<int:record_id>/edit/', views.edit_score_record, name='edit_score_record'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

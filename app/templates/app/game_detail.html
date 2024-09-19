@@ -3,40 +3,47 @@
 {% block title %}{{ game.name }}{% endblock %}
 
 {% block content %}
-<h1>{{ game.name }}</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>玩家</th>
-            <th>分数</th>
-            <th>操作</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for score in game_scores %}
-        <tr>
-            <td>
-                {% if score.player.profile_image %}
-                    <img src="{{ score.player.profile_image.url }}" alt="{{ score.player.name }}" width="50" height="50">
-                {% endif %}
-                <span style="color: {{ score.player.color }};">{{ score.player.name }}</span>
-            </td>
-            <td>{{ score.score }}</td>
-            <td>
-                {% if user.is_authenticated %}
-                <form action="{% url 'update_score' game.id score.player.id 'add' %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success btn-sm">+{{ score.player.increment }}</button>
-                </form>
-                <form action="{% url 'update_score' game.id score.player.id 'subtract' %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger btn-sm">-{{ score.player.increment }}</button>
-                </form>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<a href="{% url 'export_to_sheets' game.id %}" class="btn btn-primary">導出到 Google Sheets</a>
+<div class="container mt-4">
+    <h1 class="mb-4">{{ game.name }}</h1>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>玩家</th>
+                <th>分數</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game_score in game.gamescore_set.all %}
+            <tr>
+                <td>{{ game_score.player.name }}</td>
+                <td>{{ game_score.score }}</td>
+                <td>
+                    <form method="post" action="{% url 'update_score' game.id game_score.player.id 'increment' %}" class="d-inline">
+                        {% csrf_token %}
+                        <div class="input-group input-group-sm mb-2">
+                            <input type="text" name="reason" placeholder="原因（可選）" class="form-control">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-success">+{{ game_score.player.increment }}</button>
+                            </div>
+                        </div>
+                    </form>
+                    <form method="post" action="{% url 'update_score' game.id game_score.player.id 'decrement' %}" class="d-inline">
+                        {% csrf_token %}
+                        <div class="input-group input-group-sm">
+                            <input type="text" name="reason" placeholder="原因（可選）" class="form-control">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-danger">-{{ game_score.player.increment }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'score_records' game.id %}" class="btn btn-primary">查看分數記錄</a>
+</div>
 {% endblock %}

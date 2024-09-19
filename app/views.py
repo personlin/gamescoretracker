@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Player, Game, GameScore, History
+from .models import Player, Game, GameScore, History, ScoreRecord
 from .forms import PlayerForm, GameForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -99,18 +99,27 @@ def edit_game(request, game_id):
 @login_required
 def update_score(request, game_id, player_id, action):
     game = get_object_or_404(Game, id=game_id)
-    player = get_object_or_404(Player, id=player_id)
-    game_score = get_object_or_404(GameScore, game=game, player=player)
-
+    game_score = get_object_or_404(GameScore, game=game, player_id=player_id)
+    
     if request.method == 'POST':
-        if action == 'add':
-            game_score.score += player.increment
-            messages.success(request, f"{player.name} 的分数增加了 {player.increment} 分。")
-        elif action == 'subtract':
-            game_score.score -= player.increment
-            messages.success(request, f"{player.name} 的分数减少了 {player.increment} 分。")
-        game_score.save()
-    return redirect('game_detail', game_id=game.id)
+        reason = request.POST.get('reason', '')
+        if action == 'increment':
+            score_change = game_score.player.increment
+        elif action == 'decrement':
+            score_change = -game_score.player.increment
+        else:
+            messages.error(request, '無效的操作。')
+            return redirect('game_detail', game_id=game_id)
+        
+        ScoreRecord.objects.create(
+            game_score=game_score,
+            score_change=score_change,
+            reason=reason
+        )
+        
+        messages.success(request, '分數已成功更新。')
+    
+    return redirect('game_detail', game_id=game_id)
 
 # 其他视图，如更新分数、计算器、历史记录等，需进一步实现
 
@@ -171,3 +180,27 @@ def eval_expression(expr):
                                     ast.operator, ast.unaryop)):
             raise ValueError("不支持的表达式")
     return eval(compile(node, '<string>', 'eval'))
+
+def edit_score_record(request, record_id):
+    record = get_object_or_404(ScoreRecord, id=record_id)
+    if request.method == 'POST':
+        old_score_change = record.score_change
+        new_score_change = int(request.POST.get('score_change'))
+        record.score_change = new_score_change
+        record.reason = request.POST.get('reason')
+        record.save()
+        
+        # 更新 GameScore
+        game_score = record.game_score
+        game_score.score += (new_score_change - old_score_change)
+        game_score.save()
+        
+        messages.success(request, '分數記錄已成功更新。')
+        return redirect('score_records', game_id=record.game_score.game.id)
+    
+    return render(request, 'app/edit_score_record.html', {'record': record})
+
+def score_records(request, game_id):
+    game = get_object_or_404(Game, id=game_id)
+    records = ScoreRecord.objects.filter(game_score__game=game).order_by('-timestamp')
+    return render(request, 'app/score_records.html', {'game': game, 'records': records})

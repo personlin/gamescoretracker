@@ -30,6 +30,19 @@ class GameScore(models.Model):
     class Meta:
         unique_together = ('game', 'player')
 
+class ScoreRecord(models.Model):
+    game_score = models.ForeignKey(GameScore, on_delete=models.CASCADE, related_name='score_records')
+    score_change = models.IntegerField()
+    reason = models.TextField(blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.game_score.player.name} - {self.score_change} at {self.timestamp}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.game_score.score += self.score_change
+        self.game_score.save()
 
 class History(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

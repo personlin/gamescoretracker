@@ -128,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 # LANGUAGE_CODE = 'zh-hant-tw'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Taipei'  # 修改為台北時區
 
 USE_I18N = True
 
