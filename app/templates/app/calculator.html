@@ -1,0 +1,14 @@
+<!-- app/templates/app/calculator.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>計算器</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="expression" placeholder="輸入計算式">
+    <button type="submit">计算</button>
+</form>
+{% if result %}
+<p>結果：{{ result }}</p>
+{% endif %}
+{% endblock %}

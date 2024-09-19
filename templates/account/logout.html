@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}登出{% endblock %}
+
+{% block content %}
+<h1>登出</h1>
+<form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    <p>您確定要登出嗎？</p>
+    <button type="submit" class="btn btn-danger">確定登出</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary">取消</a>
+</form>
+{% endblock %}

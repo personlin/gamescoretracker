@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+*.swp
+
+# 虛擬環境
+env/
+venv/
+ENV/
+.env
+
+# Django
+*.sqlite3
+db.sqlite3
+/media/
+/staticfiles/
+
+# 機密設定
+**/settings_local.py
+**/settings.py
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# PyCharm
+.idea/

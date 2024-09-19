@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}玩家列表{% endblock %}
+
+{% block content %}
+<h1>玩家列表</h1>
+<a href="{% url 'create_player' %}" class="btn btn-primary mb-3">創建新玩家</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>頭像</th>
+            <th>姓名</th>
+            <th>起始分數</th>
+            <th>增量</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for player in players %}
+        <tr>
+            <td>
+                {% if player.profile_image %}
+                <img src="{{ player.profile_image.url }}" alt="{{ player.name }}" width="50" height="50">
+                {% endif %}
+            </td>
+            <td style="color: {{ player.color }};">{{ player.name }}</td>
+            <td>{{ player.starting_score }}</td>
+            <td>{{ player.increment }}</td>
+            <td>
+                <a href="{% url 'edit_player' player.id %}" class="btn btn-secondary btn-sm">編輯</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">暫無玩家。</td>
+        </tr>
+        {% endfor %}
+    </tbody>    
+{% endblock %}

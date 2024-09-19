@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}登入{% endblock %}
+
+{% block content %}
+<h1>登入</h1>
+<form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-3">
+        {{ form.login.label_tag }}
+        {{ form.login }}
+        {{ form.login.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {{ form.password.errors }}
+    </div>
+    {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <button type="submit" class="btn btn-primary">登入</button>
+</form>
+<p class="mt-3">
+    <a href="{% url 'account_reset_password' %}">忘記密碼？</a><br>
+    <a href="{% url 'account_signup' %}">註冊新帳號</a>
+</p>
+{% endblock %}

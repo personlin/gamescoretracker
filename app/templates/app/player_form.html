@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if edit_mode %}編輯玩家{% else %}創建新玩家{% endif %}{% endblock %}
+
+{% block content %}
+<h1>{% if edit_mode %}編輯玩家{% else %}創建新玩家{% endif %}</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-3">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+        {{ form.name.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.starting_score.label_tag }}
+        {{ form.starting_score }}
+        {{ form.starting_score.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.increment.label_tag }}
+        {{ form.increment }}
+        {{ form.increment.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.color.label_tag }}
+        {{ form.color }}
+        {{ form.color.errors }}
+    </div>
+    <div class="mb-3">
+        {{ form.profile_image.label_tag }}
+        {{ form.profile_image }}
+        {{ form.profile_image.errors }}
+    </div>
+    <button type="submit" class="btn btn-primary">{% if edit_mode %}更新玩家{% else %}創建玩家{% endif %}</button>
+</form>
+{% endblock %}

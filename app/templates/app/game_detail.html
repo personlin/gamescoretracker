@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ game.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ game.name }}</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>玩家</th>
+            <th>分数</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for score in game_scores %}
+        <tr>
+            <td>
+                {% if score.player.profile_image %}
+                    <img src="{{ score.player.profile_image.url }}" alt="{{ score.player.name }}" width="50" height="50">
+                {% endif %}
+                <span style="color: {{ score.player.color }};">{{ score.player.name }}</span>
+            </td>
+            <td>{{ score.score }}</td>
+            <td>
+                <form action="{% url 'update_score' game.id score.player.id 'add' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-sm">+{{ score.player.increment }}</button>
+                </form>
+                <form action="{% url 'update_score' game.id score.player.id 'subtract' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">-{{ score.player.increment }}</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'export_to_sheets' game.id %}" class="btn btn-primary">導出到 Google Sheets</a>
+{% endblock %}
