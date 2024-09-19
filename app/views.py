@@ -64,9 +64,8 @@ def game_list(request):
 
 #@login_required
 def game_detail(request, game_id):
-    game = Game.objects.get(id=game_id)
-    game_scores = GameScore.objects.filter(game=game).order_by('-score')
-    return render(request, 'app/game_detail.html', {'game': game, 'game_scores': game_scores})
+    game = get_object_or_404(Game, id=game_id)
+    return render(request, 'app/game_detail.html', {'game': game})
 
 @login_required
 def edit_game(request, game_id):
@@ -181,6 +180,7 @@ def eval_expression(expr):
             raise ValueError("不支持的表达式")
     return eval(compile(node, '<string>', 'eval'))
 
+@login_required
 def edit_score_record(request, record_id):
     record = get_object_or_404(ScoreRecord, id=record_id)
     if request.method == 'POST':

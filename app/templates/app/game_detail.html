@@ -11,7 +11,9 @@
             <tr>
                 <th>玩家</th>
                 <th>分數</th>
+                {% if user.is_authenticated %}
                 <th>操作</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -19,6 +21,7 @@
             <tr>
                 <td>{{ game_score.player.name }}</td>
                 <td>{{ game_score.score }}</td>
+                {% if user.is_authenticated %}
                 <td>
                     <form method="post" action="{% url 'update_score' game.id game_score.player.id 'increment' %}" class="d-inline">
                         {% csrf_token %}
@@ -39,6 +42,7 @@
                         </div>
                     </form>
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

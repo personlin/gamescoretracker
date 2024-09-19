@@ -13,7 +13,9 @@
                 <th>分數變化</th>
                 <th>原因</th>
                 <th>時間</th>
+                {% if user.is_authenticated %}
                 <th>操作</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -23,13 +25,15 @@
                 <td>{{ record.score_change }}</td>
                 <td>{{ record.reason|default:"" }}</td>
                 <td>{{ record.timestamp|date:"Y-m-d H:i:s" }}</td>
+                {% if user.is_authenticated %}
                 <td>
                     <a href="{% url 'edit_score_record' record.id %}" class="btn btn-primary btn-sm">編輯</a>
                 </td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="text-center">暫無記錄</td>
+                <td colspan="{% if user.is_authenticated %}5{% else %}4{% endif %}" class="text-center">暫無記錄</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -6,6 +6,7 @@
 <div class="container mt-4">
     <h1 class="mb-4">編輯分數記錄</h1>
 
+    {% if user.is_authenticated %}
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
@@ -21,5 +22,9 @@
         <button type="submit" class="btn btn-primary">保存</button>
         <a href="{% url 'score_records' record.game_score.game.id %}" class="btn btn-secondary">取消</a>
     </form>
+    {% else %}
+    <p class="alert alert-warning">您需要登入才能編輯分數記錄。</p>
+    <a href="{% url 'score_records' record.game_score.game.id %}" class="btn btn-secondary">返回分數記錄</a>
+    {% endif %}
 </div>
 {% endblock %}
