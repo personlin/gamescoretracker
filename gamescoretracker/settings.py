@@ -190,4 +190,8 @@ LOGGING = {
     },
 }
 
-CSRF_TRUSTED_ORIGINS = ['https://scoreboard.personlin.com']
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CSRF_TRUSTED_ORIGINS = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', 'https://scoreboard.personlin.com').split(',')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
