@@ -57,12 +57,12 @@ def create_game(request):
     players = Player.objects.all()
     return render(request, 'app/game_form.html', {'form': form, 'players': players})
 
-@login_required
+#@login_required
 def game_list(request):
     games = Game.objects.all().order_by('-date')
     return render(request, 'app/game_list.html', {'games': games})
 
-@login_required
+#@login_required
 def game_detail(request, game_id):
     game = Game.objects.get(id=game_id)
     game_scores = GameScore.objects.filter(game=game).order_by('-score')

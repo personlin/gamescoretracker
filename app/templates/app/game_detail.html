@@ -23,6 +23,7 @@
             </td>
             <td>{{ score.score }}</td>
             <td>
+                {% if user.is_authenticated %}
                 <form action="{% url 'update_score' game.id score.player.id 'add' %}" method="post" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-success btn-sm">+{{ score.player.increment }}</button>
@@ -31,6 +32,7 @@
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger btn-sm">-{{ score.player.increment }}</button>
                 </form>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
