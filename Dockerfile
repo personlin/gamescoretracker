@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 复制当前目录下的所有文件到工作目录
 COPY . /app/
 
+# 复制 .env 文件到工作目录
+COPY .env /app/.env
+
 # 暴露应用运行的端口（默认 8000）
 EXPOSE 8000
 
