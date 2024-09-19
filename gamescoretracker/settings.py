@@ -189,3 +189,5 @@ LOGGING = {
         'level': 'INFO',
     },
 }
+
+CSRF_TRUSTED_ORIGINS = ['https://scoreboard.personlin.com']
