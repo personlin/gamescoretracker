@@ -22,10 +22,15 @@ EXPOSE 8000
 # 设置环境变量
 ENV PYTHONUNBUFFERED=1
 
-# 运行数据库迁移和收集静态文件的命令
+# 运行收集静态文件的命令
 RUN python manage.py collectstatic --noinput
-RUN python manage.py makemigrations
-RUN python manage.py migrate
+
+# 创建一个 entrypoint 脚本
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# 使用 entrypoint 脚本作为容器的入口点
+ENTRYPOINT ["/app/entrypoint.sh"]
 
 # 启动命令，使用 Gunicorn 作为应用服务器
 CMD ["gunicorn", "gamescoretracker.wsgi:application", "--bind", "0.0.0.0:8000", "--timeout", "120", "--log-level", "debug"]
