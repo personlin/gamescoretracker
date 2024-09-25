@@ -49,5 +49,71 @@
     </table>
 
     <a href="{% url 'score_records' game.id %}" class="btn btn-primary">查看分數記錄</a>
+
+    <!-- 添加圖表 -->
+    <div class="mt-5">
+        <h2>分數統計</h2>
+        <canvas id="scoreChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('scoreChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ chart_data.labels|safe }},
+                    datasets: [{
+                        label: '分數',
+                        data: {{ chart_data.scores|safe }},
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '分數'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '玩家'
+                            }
+                        }
+                    },
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '玩家分數統計'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `分數: ${context.parsed.y}`;
+                                }
+                            }
+                        }
+                    },
+                    onClick: (e, activeElements) => {
+                        if (activeElements.length > 0) {
+                            const index = activeElements[0].index;
+                            const playerName = chart.data.labels[index];
+                            alert(`您點擊了 ${playerName} 的分數柱狀圖`);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </div>
 {% endblock %}

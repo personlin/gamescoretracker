@@ -7,6 +7,7 @@ import google.oauth2.credentials
 from googleapiclient.discovery import build
 from allauth.socialaccount.models import SocialToken
 import ast
+from django.db.models import Sum
 
 def home(request):
     games = Game.objects.all()
@@ -65,7 +66,18 @@ def game_list(request):
 #@login_required
 def game_detail(request, game_id):
     game = get_object_or_404(Game, id=game_id)
-    return render(request, 'app/game_detail.html', {'game': game})
+    game_scores = game.gamescore_set.all()
+    
+    # 準備圖表數據
+    chart_data = {
+        'labels': [score.player.name for score in game_scores],
+        'scores': [score.score for score in game_scores],
+    }
+    
+    return render(request, 'app/game_detail.html', {
+        'game': game,
+        'chart_data': chart_data,
+    })
 
 @login_required
 def edit_game(request, game_id):
